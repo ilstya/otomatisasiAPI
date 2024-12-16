@@ -13,28 +13,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout kode
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Setup JDK
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # Step 3: Install Chrome
     - name: Install Chrome Stable
       uses: browser-actions/setup-chrome@v1
       with:
         chrome-version: 'stable'
 
-    # Step 4: Grant execute permission for Gradlew
     - name: Grant execute permission for Gradlew
       run: chmod +x gradlew
 
-    # Step 5: Cache Gradle dependencies
     - name: Cache Gradle dependencies
       uses: actions/cache@v3
       with:
@@ -43,14 +38,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    # Step 6: Jalankan build dan test
     - name: Build and test
       run: ./gradlew clean test
 
-    # Step 7: Upload laporan hasil test
     - name: Archive Test Reports
-      if: always()
-      uses: actions/upload-artifact@v3
+      if: always() # Pastikan laporan tetap diunggah meskipun pengujian gagal
+      uses: actions/upload-artifact@v4
       with:
         name: test-reports
         path: build/reports/tests/test
