@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.setya'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Selenium for Web Testing
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.14.0'
+
+    // RestAssured for API Testing
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'
+
+    // TestNG for testing framework
+    testImplementation 'org.testng:testng:7.7.1'
+
+    // Allure for reporting
+    testImplementation 'io.qameta.allure:allure-testng:2.22.1'
+
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+}
+
+test {
+    useTestNG()
+    // Add Allure listener for report generation
+    systemProperty 'allure.results.directory', 'build/allure-results'
+}
+
+tasks.register('allureReport') {
+    group = 'verification'
+    description = 'Generate Allure Report'
+    doLast {
+        exec {
+            commandLine 'allure', 'generate', 'build/allure-results', '-o', 'build/allure-report', '--clean'
+        }
+    }
+}
