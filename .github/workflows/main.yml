@@ -1,0 +1,50 @@
+name: Gradle Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout kode
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Setup JDK
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    # Step 3: Beri izin eksekusi pada gradlew
+    - name: Grant execute permission for Gradlew
+      run: chmod +x gradlew
+
+    # Step 4: Cache Gradle dependencies
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    # Step 5: Jalankan build dan test
+    - name: Build and test
+      run: ./gradlew clean test
+
+    # Step 6: Upload laporan hasil test
+    - name: Archive Test Reports
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-reports
+        path: build/reports/tests/test
