@@ -23,6 +23,8 @@ dependencies {
     testImplementation 'io.qameta.allure:allure-testng:2.22.1'
 
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.5.3'
 }
 
 test {
