@@ -28,7 +28,7 @@ jobs:
     - name: Set up Chrome
       uses: browser-actions/setup-chrome@v1
       with:
-        chrome-version: 'stable'
+        chrome-version: 'latest'
         driver-version: 'latest'
 
     # Step 4: Grant execute permission for Gradlew
