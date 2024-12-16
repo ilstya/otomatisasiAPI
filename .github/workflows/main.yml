@@ -24,11 +24,18 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Step 3: Beri izin eksekusi pada gradlew
+    # Step 3: Install Chrome dan ChromeDriver
+    - name: Set up Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: 'stable'
+        driver-version: 'latest'
+
+    # Step 4: Grant execute permission for Gradlew
     - name: Grant execute permission for Gradlew
       run: chmod +x gradlew
 
-    # Step 4: Cache Gradle dependencies
+    # Step 5: Cache Gradle dependencies
     - name: Cache Gradle dependencies
       uses: actions/cache@v3
       with:
@@ -37,11 +44,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    # Step 5: Jalankan build dan test
+    # Step 6: Jalankan build dan test
     - name: Build and test
       run: ./gradlew clean test
 
-    # Step 6: Upload laporan hasil test
+    # Step 7: Upload laporan hasil test
     - name: Archive Test Reports
       if: always()
       uses: actions/upload-artifact@v3
