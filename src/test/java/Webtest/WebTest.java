@@ -16,14 +16,20 @@ import static org.testng.Assert.assertTrue;
 public class WebTest extends BaseTest {
 
     @Test
-    @Step("Testing Google Search")
     public void testGoogleSearch() {
         driver.get("https://www.google.com");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement searchBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
+        WebElement searchBox = driver.findElement(By.name("q"));
         searchBox.sendKeys("Selenium WebDriver\n");
+
+        // Tunggu hingga halaman hasil pencarian termuat
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.titleContains("Selenium WebDriver"));
+
+        // Debugging log
         String title = driver.getTitle();
-        System.out.println("Page title: " + title); // Debugging
+        System.out.println("Current page title: " + title);
+
+        // Assertion
         assertTrue(title.contains("Selenium WebDriver"), "Expected title to contain 'Selenium WebDriver'");
     }
 }
